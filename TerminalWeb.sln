@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalWeb", "TerminalWeb\TerminalWeb.csproj", "{4FE52A73-58C2-47B1-935E-9A543A8BCBBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalWeb.Client", "TerminalWeb.Client\TerminalWeb.Client.csproj", "{73BA33B3-88F3-44F0-868C-B0B8D3160B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4FE52A73-58C2-47B1-935E-9A543A8BCBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FE52A73-58C2-47B1-935E-9A543A8BCBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FE52A73-58C2-47B1-935E-9A543A8BCBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73BA33B3-88F3-44F0-868C-B0B8D3160B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73BA33B3-88F3-44F0-868C-B0B8D3160B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73BA33B3-88F3-44F0-868C-B0B8D3160B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73BA33B3-88F3-44F0-868C-B0B8D3160B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
