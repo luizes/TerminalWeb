@@ -11,6 +11,6 @@ namespace TerminalWeb.Repositories.Implementations
         {
         }
 
-        public override IQueryable<Machine> GetAll() => base.GetAll().AsNoTracking();
+        public override IQueryable<Machine> GetAll() => base.GetAll().Include(m => m.DiskDrives).AsNoTracking();
     }
 }

@@ -8,8 +8,8 @@ namespace TerminalWeb.Models.Base
         public Entity() => CreatedAt = DateTimeOffset.Now;
 
         [Key]
-        public int Id { get; set; }
+        public int Id { get; protected set; }
 
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; private set; }
     }
 }
