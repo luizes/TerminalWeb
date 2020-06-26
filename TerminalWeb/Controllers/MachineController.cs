@@ -10,7 +10,6 @@ namespace TerminalWeb.Controllers
     [ApiController]
     public class MachineController : ControllerBase
     {
-        // GET: api/machine
         [HttpGet]
         public ActionResult<List<Machine>> Get([FromServices] IMachineRepository repository)
         {
@@ -19,7 +18,6 @@ namespace TerminalWeb.Controllers
             return machines;
         }
 
-        // POST api/machine
         [HttpPost]
         public ActionResult<Machine> Post([FromServices] IMachineRepository repository, [FromBody] Machine machine)
         {

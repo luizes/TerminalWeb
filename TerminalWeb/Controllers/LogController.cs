@@ -10,11 +10,9 @@ namespace TerminalWeb.Controllers
     [ApiController]
     public class LogController : ControllerBase
     {
-        // GET api/log/{machineId:int}
         [HttpGet("{machineId:int}")]
         public ActionResult<List<Log>> Get([FromServices] ILogRepository repository, int machineId) => repository.GetAllByMachineId(machineId).ToList();
 
-        // POST api/log
         [HttpPost]
         public ActionResult<Log> Post([FromServices] ILogRepository repository, [FromBody] Log log)
         {
