@@ -8,7 +8,6 @@ namespace TerminalWeb.Models
         [Required]
         public string Command { get; set; }
 
-        [Required]
         public string Response { get; set; }
 
         [Required]
