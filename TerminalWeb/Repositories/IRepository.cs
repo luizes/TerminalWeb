@@ -7,5 +7,6 @@ namespace TerminalWeb.Repositories
     {
         void Create(Entity entity);
         IQueryable<T> GetAll();
+        void Update(Entity entity);
     }
 }

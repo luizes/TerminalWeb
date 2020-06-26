@@ -23,7 +23,5 @@ namespace TerminalWeb.Models
 
         [Required]
         public IEnumerable<DiskDrive> DiskDrives { get; set; }
-
-        public IEnumerable<Log> Logs { get; set; }
     }
 }

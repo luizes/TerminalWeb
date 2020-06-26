@@ -13,9 +13,17 @@ namespace TerminalWeb.Repositories.Implementations
         public virtual void Create(Entity entity)
         {
             _context.Add(entity);
-            _context.SaveChanges();
+            SaveChanges();
         }
 
         public virtual IQueryable<T> GetAll() => _context.Set<T>().OrderBy(e => e.CreatedAt);
+
+        public void Update(Entity entity)
+        {
+            _context.Update(entity);
+            SaveChanges();
+        }
+
+        private void SaveChanges() => _context.SaveChanges();
     }
 }
