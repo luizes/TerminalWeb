@@ -5,7 +5,10 @@ namespace TerminalWeb.Client
 {
     public class Program
     {
-        public static void Main() => CreateHostBuilder().Build().Run();
+        public static void Main()
+        {
+            CreateHostBuilder().Build().Run();
+        }
 
         private static IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()

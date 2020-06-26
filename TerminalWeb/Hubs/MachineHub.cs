@@ -9,7 +9,10 @@ namespace TerminalWeb.Hubs
     {
         private readonly IMachineRepository _repository;
 
-        public MachineHub(IMachineRepository repository) => _repository = repository;
+        public MachineHub(IMachineRepository repository)
+        {
+            _repository = repository;
+        }
 
         public async Task Create(Machine machine)
         {

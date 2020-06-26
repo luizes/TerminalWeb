@@ -9,7 +9,10 @@ namespace TerminalWeb.Hubs
     {
         private readonly ILogRepository _repository;
 
-        public LogHub(ILogRepository repository) => _repository = repository;
+        public LogHub(ILogRepository repository)
+        {
+            _repository = repository;
+        }
 
         public async Task Send(Log log)
         {

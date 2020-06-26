@@ -8,7 +8,10 @@ namespace TerminalWeb.Repositories.Implementations
     {
         private readonly StoreDataContext _context;
 
-        public Repository(StoreDataContext context) => _context = context;
+        public Repository(StoreDataContext context)
+        {
+            _context = context;
+        }
 
         public virtual void Create(Entity entity)
         {
@@ -24,6 +27,9 @@ namespace TerminalWeb.Repositories.Implementations
             SaveChanges();
         }
 
-        private void SaveChanges() => _context.SaveChanges();
+        private void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
     }
 }

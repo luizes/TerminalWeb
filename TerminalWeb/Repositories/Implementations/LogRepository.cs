@@ -13,9 +13,6 @@ namespace TerminalWeb.Repositories.Implementations
 
         public override IQueryable<Log> GetAll() => base.GetAll().AsNoTracking();
 
-        public IQueryable<Log> GetAllByMachineId(int machineId)
-        {
-            return GetAll().Where(l => l.MachineId == machineId);
-        }
+        public IQueryable<Log> GetAllByMachineId(int machineId) => GetAll().Where(l => l.MachineId == machineId);
     }
 }

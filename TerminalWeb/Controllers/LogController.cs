@@ -10,15 +10,22 @@ namespace TerminalWeb.Controllers
     [ApiController]
     public class LogController : ControllerBase
     {
+        private readonly ILogRepository _repository;
+
+        public LogController(ILogRepository repository)
+        {
+            _repository = repository;
+        }
+
         [HttpGet("{machineId:int}")]
-        public ActionResult<List<Log>> Get([FromServices] ILogRepository repository, int machineId) => repository.GetAllByMachineId(machineId).ToList();
+        public ActionResult<List<Log>> Get(int machineId) => _repository.GetAllByMachineId(machineId).ToList();
 
         [HttpPost]
-        public ActionResult<Log> Post([FromServices] ILogRepository repository, [FromBody] Log log)
+        public ActionResult<Log> Post([FromBody] Log log)
         {
             if (ModelState.IsValid)
             {
-                repository.Create(log);
+                _repository.Create(log);
 
                 return log;
             }

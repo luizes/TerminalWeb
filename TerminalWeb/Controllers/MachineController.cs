@@ -10,20 +10,22 @@ namespace TerminalWeb.Controllers
     [ApiController]
     public class MachineController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<List<Machine>> Get([FromServices] IMachineRepository repository)
-        {
-            var machines = repository.GetAll().ToList();
+        private readonly IMachineRepository _repository;
 
-            return machines;
+        public MachineController(IMachineRepository repository)
+        {
+            _repository = repository;
         }
 
+        [HttpGet]
+        public ActionResult<List<Machine>> Get() => _repository.GetAll().ToList();
+
         [HttpPost]
-        public ActionResult<Machine> Post([FromServices] IMachineRepository repository, [FromBody] Machine machine)
+        public ActionResult<Machine> Post([FromBody] Machine machine)
         {
             if (ModelState.IsValid)
             {
-                repository.Create(machine);
+                _repository.Create(machine);
 
                 return machine;
             }
