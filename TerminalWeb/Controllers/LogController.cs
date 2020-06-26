@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using TerminalWeb.Models;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using TerminalWeb.Repositories;
 
 namespace TerminalWeb.Controllers
 {
@@ -9,17 +10,22 @@ namespace TerminalWeb.Controllers
     [ApiController]
     public class LogController : ControllerBase
     {
-        // GET api/<LogController>/5
-        [HttpGet("{id:int}")]
-        public string Get(int machineId)
-        {
-            return "value";
-        }
+        // GET api/log/{machineId:int}
+        [HttpGet("{machineId:int}")]
+        public ActionResult<List<Log>> Get([FromServices] ILogRepository repository, int machineId) => repository.GetAllByMachineId(machineId).ToList();
 
-        // POST api/<LogController>
+        // POST api/log
         [HttpPost]
-        public void Post([FromBody] Log log)
+        public ActionResult<Log> Post([FromServices] ILogRepository repository, [FromBody] Log log)
         {
+            if (ModelState.IsValid)
+            {
+                repository.Create(log);
+
+                return log;
+            }
+
+            return BadRequest(ModelState);
         }
     }
 }

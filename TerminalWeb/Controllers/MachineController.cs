@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using TerminalWeb.Data;
+using System.Linq;
 using TerminalWeb.Models;
+using TerminalWeb.Repositories;
 
 namespace TerminalWeb.Controllers
 {
@@ -11,23 +10,22 @@ namespace TerminalWeb.Controllers
     [ApiController]
     public class MachineController : ControllerBase
     {
-        // GET: api/<MachineController> 
+        // GET: api/machine
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetAsync([FromServices] StoreDataContext context)
+        public ActionResult<List<Machine>> Get([FromServices] IMachineRepository repository)
         {
-            var machines = await context.Machines.ToListAsync();
+            var machines = repository.GetAll().ToList();
 
             return machines;
         }
 
-        // POST api/<MachineController>
+        // POST api/machine
         [HttpPost]
-        public async Task<ActionResult<Machine>> Post([FromServices] StoreDataContext context, [FromBody] Machine machine)
+        public ActionResult<Machine> Post([FromServices] IMachineRepository repository, [FromBody] Machine machine)
         {
             if (ModelState.IsValid)
             {
-                context.Machines.Add(machine);
-                await context.SaveChangesAsync();
+                repository.Create(machine);
 
                 return machine;
             }

@@ -8,7 +8,7 @@ namespace TerminalWeb.Models.Base
         public Entity() => CreatedAt = DateTimeOffset.Now;
 
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
     }
