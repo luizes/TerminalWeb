@@ -9,7 +9,7 @@ namespace TerminalWeb.Domain.Commands
     {
         public CreateMachineCommand() { }
 
-        public CreateMachineCommand(string name, string ipLocal, bool antivirusInstalled, bool firewallIsActive, string windowsVersion, List<(string Name, long TotalSize)> diskDrives)
+        public CreateMachineCommand(string name, string ipLocal, bool antivirusInstalled, bool firewallIsActive, string windowsVersion, IEnumerable<(string Name, long TotalSize)> diskDrives)
         {
             Name = name;
             IpLocal = ipLocal;
@@ -24,7 +24,7 @@ namespace TerminalWeb.Domain.Commands
         public bool AntivirusInstalled { get; set; }
         public bool FirewallIsActive { get; set; }
         public string WindowsVersion { get; set; }
-        public List<(string Name, long TotalSize)> DiskDrives { get; set; }
+        public IEnumerable<(string Name, long TotalSize)> DiskDrives { get; set; }
 
         public void Validate()
         {

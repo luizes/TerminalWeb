@@ -26,7 +26,8 @@ namespace TerminalWeb.Domain.Handles
 
             var machine = new Machine(command.Name, command.IpLocal, command.AntivirusInstalled, command.FirewallIsActive, command.WindowsVersion);
 
-            command.DiskDrives.ForEach(disk => machine.AddDiskDrive(disk.Name, disk.TotalSize));
+            foreach ((string Name, long TotalSize) in command.DiskDrives)
+                machine.AddDiskDrive(Name, TotalSize);
 
             _repository.Create(machine);
 

@@ -3,11 +3,13 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TerminalWeb.Domain.Entities;
 
 namespace TerminalWeb.Client
 {
     class Worker : BackgroundService
     {
+        private Machine machine;
         private HubConnection machineConnection;
         private HubConnection logConnection;
 
