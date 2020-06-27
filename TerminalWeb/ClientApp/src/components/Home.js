@@ -78,9 +78,11 @@ export default () => {
   useEffect(() => {
     if (machineHub)
       machineHub.start().then(() => {
-        machineHub.on("NewMachine", newMachine => {
-          setMachines([...machines, newMachine]);
-          setNotification(`${machine.name} conectada!`)
+        machineHub.on("NewMachine", ({ success, data: newMachine }) => {
+          if (success) {
+            setMachines([...machines, newMachine]);
+            setNotification(`${newMachine.name} conectada!`)
+          }
         });
       });
   }, [machineHub]);
@@ -88,8 +90,8 @@ export default () => {
   useEffect(() => {
     if (logHub)
       logHub.start().then(() => {
-        logHub.on("ResponseLog", newLog => {
-          if (newLog.machineId === machine.id) {
+        logHub.on("ResponseLog", ({ success, data: newLog }) => {
+          if (success && newLog.machineId === machine.id) {
             setLogs([...logs, newLog]);
             scrollToButton();
           }
