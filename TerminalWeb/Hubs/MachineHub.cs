@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
-using TerminalWeb.Domain.Entities;
-using TerminalWeb.Domain.Repositories;
+using TerminalWeb.Domain.Commands;
+using TerminalWeb.Domain.Commands.Results;
+using TerminalWeb.Domain.Handles;
 
 namespace TerminalWeb.Hubs
 {
     public sealed class MachineHub : Hub
     {
-        private readonly IMachineRepository _repository;
+        private readonly MachineCommandHandler _handler;
 
-        public MachineHub(IMachineRepository repository)
+        public MachineHub(MachineCommandHandler handler)
         {
-            _repository = repository;
+            _handler = handler;
         }
 
-        public async Task Create(Machine machine)
+        public async Task Create(CreateMachineCommand command)
         {
-            _repository.Create(machine);
+            var result = (GenericCommandResult)_handler.Handle(command);
 
-            await Clients.All.SendAsync("NewMachine", machine);
+            await Clients.All.SendAsync("NewMachine", result);
         }
     }
 }
