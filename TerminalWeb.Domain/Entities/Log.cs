@@ -4,6 +4,8 @@ namespace TerminalWeb.Domain.Entities
 {
     public sealed class Log : Entity
     {
+        public Log() { }
+
         public Log(Guid machineId, string command)
         {
             MachineId = machineId;

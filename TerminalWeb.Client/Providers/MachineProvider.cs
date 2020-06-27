@@ -13,12 +13,11 @@ namespace TerminalWeb.Client.Providers
         public CreateMachineCommand Generate()
         {
             var name = Environment.MachineName;
-            var ipLocal = Dns.GetHostAddresses(Dns.GetHostName())[4].ToString();
+            var ipLocal = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString();
             var antivirusInstalled = AntivirusInstalled();
-            dynamic firewallManager = Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwMgr"));
-            var firewallIsActive = firewallManager.LocalPolicy.CurrentProfile.FirewallEnabled;
+            var firewallIsActive = false;
             var windowsVersion = Environment.OSVersion.VersionString;
-            var diskDrives = DriveInfo.GetDrives().Select(drive => (drive.Name, drive.TotalSize));
+            var diskDrives = DriveInfo.GetDrives().Where(d => d.IsReady).Select(drive => (drive.Name, drive.TotalSize));
 
             return new CreateMachineCommand(name, ipLocal, antivirusInstalled, firewallIsActive, windowsVersion, diskDrives);
         }

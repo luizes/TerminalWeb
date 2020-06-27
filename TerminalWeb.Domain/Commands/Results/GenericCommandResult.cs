@@ -6,7 +6,7 @@ namespace TerminalWeb.Domain.Commands.Results
     {
         public GenericCommandResult() { }
 
-        public GenericCommandResult(bool success, string message, object data)
+        public GenericCommandResult(bool success, string message, dynamic data)
         {
             Success = success;
             Message = message;
@@ -15,6 +15,6 @@ namespace TerminalWeb.Domain.Commands.Results
 
         public bool Success { get; set; }
         public string Message { get; set; }
-        public object Data { get; set; }
+        public dynamic Data { get; set; }
     }
 }

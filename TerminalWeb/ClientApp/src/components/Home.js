@@ -63,7 +63,7 @@ export default () => {
   const [machineHub, setMachineHub] = useState(undefined);
   const [logs, setLogs] = useState([]);
   const [logHub, setLogHub] = useState(undefined);
-  const [newCommad, setNewCommand] = useState("");
+  const [newCommand, setNewCommand] = useState("");
 
   useEffect(() => {
     MachineRepository.getAll().then(({ data }) => {
@@ -80,7 +80,7 @@ export default () => {
       machineHub.start().then(() => {
         machineHub.on("NewMachine", ({ success, data: newMachine }) => {
           if (success) {
-            setMachines([...machines, newMachine]);
+            setMachines(others => [...others, newMachine]);
             setNotification(`${newMachine.name} conectada!`)
           }
         });
@@ -91,8 +91,8 @@ export default () => {
     if (logHub)
       logHub.start().then(() => {
         logHub.on("ResponseLog", ({ success, data: newLog }) => {
-          if (success && newLog.machineId === machine.id) {
-            setLogs([...logs, newLog]);
+          if (success) {
+            setLogs(others => [...others, newLog]);
             scrollToButton();
           }
         });
@@ -108,8 +108,10 @@ export default () => {
   }, [machine]);
 
   const createCommand = e => {
-    if (e.keyCode === 13)
-      logHub.invoke("Send", { machineId: machine.id, command: newCommad.trim() }).then(() => {
+    let commandTrim = newCommand.trim();
+
+    if (e.keyCode === 13 && commandTrim)
+      logHub.invoke("Send", { machineId: machine.id, command: commandTrim }).then(() => {
         setNewCommand("");
         scrollToButton();
       });
@@ -187,7 +189,7 @@ export default () => {
               </CardContent>
             </Card>
             <FormControl fullWidth>
-              <TextField autoFocus id="cmd" label=">" variant="filled" value={newCommad} onChange={e => setNewCommand(e.target.value)} onKeyDown={createCommand} />
+              <TextField autoFocus id="cmd" label=">" variant="filled" value={newCommand} onChange={e => setNewCommand(e.target.value)} onKeyDown={createCommand} />
             </FormControl>
           </Grid>}
         </Grid>
