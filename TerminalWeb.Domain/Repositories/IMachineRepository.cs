@@ -1,6 +1,6 @@
-﻿using TerminalWeb.Models;
+﻿using TerminalWeb.Domain.Entities;
 
-namespace TerminalWeb.Repositories
+namespace TerminalWeb.Domain.Repositories
 {
     public interface IMachineRepository : IRepository<Machine>
     {

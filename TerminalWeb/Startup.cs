@@ -1,14 +1,15 @@
-  using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TerminalWeb.Data;
+using TerminalWeb.Domain.Handles;
+using TerminalWeb.Domain.Repositories;
 using TerminalWeb.Hubs;
-using TerminalWeb.Repositories;
-using TerminalWeb.Repositories.Implementations;
+using TerminalWeb.Infra.Context;
+using TerminalWeb.Infra.Repositories;
 
 namespace TerminalWeb
 {
@@ -22,13 +23,15 @@ namespace TerminalWeb
         {
             services.AddSignalR();
 
-            services.AddDbContext<StoreDataContext>(opt => opt.UseInMemoryDatabase("TerminalWeb"));
-            // services.AddDbContext<StoreDataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("TerminalWeb"));
+            // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
 
-            services.AddScoped<StoreDataContext, StoreDataContext>();
+            services.AddScoped<DataContext, DataContext>();
 
             services.AddTransient<IMachineRepository, MachineRepository>();
             services.AddTransient<ILogRepository, LogRepository>();
+            services.AddTransient<MachineCommandHandler, MachineCommandHandler>();
+            services.AddTransient<LogCommandHandler, LogCommandHandler>();
 
             services.AddControllersWithViews();
 
@@ -55,6 +58,7 @@ namespace TerminalWeb
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {

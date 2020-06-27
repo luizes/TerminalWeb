@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using TerminalWeb.Models;
-using TerminalWeb.Repositories;
+using TerminalWeb.Domain.Entities;
+using TerminalWeb.Domain.Repositories;
 
 namespace TerminalWeb.Controllers
 {
@@ -17,20 +18,7 @@ namespace TerminalWeb.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{machineId:int}")]
-        public ActionResult<List<Log>> Get(int machineId) => _repository.GetAllByMachineId(machineId).ToList();
-
-        [HttpPost]
-        public ActionResult<Log> Post([FromBody] Log log)
-        {
-            if (ModelState.IsValid)
-            {
-                _repository.Create(log);
-
-                return log;
-            }
-
-            return BadRequest(ModelState);
-        }
+        [HttpGet("{machineId}")]
+        public ActionResult<List<Log>> Get(Guid machineId) => _repository.GetAllByMachineId(machineId).ToList();
     }
 }

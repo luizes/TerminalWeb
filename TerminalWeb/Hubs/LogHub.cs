@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
-using TerminalWeb.Models;
-using TerminalWeb.Repositories;
+using TerminalWeb.Domain.Entities;
+using TerminalWeb.Domain.Repositories;
 
 namespace TerminalWeb.Hubs
 {
