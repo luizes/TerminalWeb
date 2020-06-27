@@ -8,6 +8,6 @@ Solução de demanda para controlar máquinas remotamente usando CLI.
 
 ## Requisitos
  * [.NET Core 3.1](https://dotnet.microsoft.com/download)
- * [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/)
+ * [Visual Studio](https://visualstudio.microsoft.com/downloads/)
  * [Node.js](https://nodejs.org/en/download/)
  * [Yarn](https://classic.yarnpkg.com/en/docs/install)
