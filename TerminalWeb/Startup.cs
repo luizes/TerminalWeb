@@ -30,8 +30,8 @@ namespace TerminalWeb
 
             services.AddTransient<IMachineRepository, MachineRepository>();
             services.AddTransient<ILogRepository, LogRepository>();
-            services.AddTransient<MachineCommandHandler, MachineCommandHandler>();
-            services.AddTransient<LogCommandHandler, LogCommandHandler>();
+            services.AddTransient<MachineHandler, MachineHandler>();
+            services.AddTransient<LogHandler, LogHandler>();
 
             services.AddControllersWithViews();
 

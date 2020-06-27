@@ -8,11 +8,11 @@ using TerminalWeb.Domain.Repositories;
 
 namespace TerminalWeb.Domain.Handles
 {
-    public sealed class MachineCommandHandler : Notifiable, IHandler<CreateMachineCommand>
+    public sealed class MachineHandler : Notifiable, IHandler<CreateMachineCommand>
     {
         private readonly IMachineRepository _repository;
 
-        public MachineCommandHandler(IMachineRepository repository)
+        public MachineHandler(IMachineRepository repository)
         {
             _repository = repository;
         }
@@ -26,7 +26,7 @@ namespace TerminalWeb.Domain.Handles
 
             var machine = new Machine(command.Name, command.IpLocal, command.AntivirusInstalled, command.FirewallIsActive, command.WindowsVersion);
 
-            command.DiskDrives.ForEach(disk => machine.AddDiskDrive(disk.name, disk.totalSize));
+            command.DiskDrives.ForEach(disk => machine.AddDiskDrive(disk.Name, disk.TotalSize));
 
             _repository.Create(machine);
 

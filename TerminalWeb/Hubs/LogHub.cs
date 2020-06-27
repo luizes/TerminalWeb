@@ -8,9 +8,9 @@ namespace TerminalWeb.Hubs
 {
     public class LogHub : Hub
     {
-        private readonly LogCommandHandler _handler;
+        private readonly LogHandler _handler;
 
-        public LogHub(LogCommandHandler handler)
+        public LogHub(LogHandler handler)
         {
             _handler = handler;
         }

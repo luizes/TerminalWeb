@@ -8,11 +8,11 @@ using TerminalWeb.Domain.Repositories;
 
 namespace TerminalWeb.Domain.Handles
 {
-    public sealed class LogCommandHandler : Notifiable, IHandler<CreateLogCommand>, IHandler<ResponseLogCommand>
+    public sealed class LogHandler : Notifiable, IHandler<CreateLogCommand>, IHandler<ResponseLogCommand>
     {
         private readonly ILogRepository _repository;
 
-        public LogCommandHandler(ILogRepository repository)
+        public LogHandler(ILogRepository repository)
         {
             _repository = repository;
         }

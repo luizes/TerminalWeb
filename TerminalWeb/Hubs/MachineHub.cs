@@ -8,9 +8,9 @@ namespace TerminalWeb.Hubs
 {
     public sealed class MachineHub : Hub
     {
-        private readonly MachineCommandHandler _handler;
+        private readonly MachineHandler _handler;
 
-        public MachineHub(MachineCommandHandler handler)
+        public MachineHub(MachineHandler handler)
         {
             _handler = handler;
         }
