@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using TerminalWeb.Domain.Commands;
 using TerminalWeb.Domain.Commands.Results;
 using TerminalWeb.Domain.Handles;
@@ -29,7 +30,7 @@ namespace TerminalWeb.Test.HandlerTests
         [TestMethod]
         public void DadoUmComandoInvalidoDeveCriarUmaMaquina()
         {
-            _result = (GenericCommandResult)_handler.Handle(_invalidCommand);
+            _result = (GenericCommandResult)_handler.Handle(_validCommand);
 
             Assert.AreEqual(_result.Success, true);
         }
