@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Management.Automation;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +15,6 @@ namespace TerminalWeb.Client
         private readonly HubConnection _machineConnection;
         private readonly HubConnection _logConnection;
         private readonly CreateMachineCommand _machine = new MachineProvider().Generate();
-        private readonly PowerShell powerShell = PowerShell.Create();
 
         public Worker()
         {
@@ -33,11 +30,11 @@ namespace TerminalWeb.Client
                 await _machineConnection.StartAsync();
                 await _machineConnection.SendAsync("Create", _machine);
                 await _logConnection.StartAsync();
-                _logConnection.On("NewLog", ProccessLog());
+                _logConnection.On("NewLog", ProcessLog());
             });
         }
 
-        private Action<GenericCommandResult> ProccessLog() => message =>
+        private Action<GenericCommandResult> ProcessLog() => message =>
         {
             if (!message.Success)
                 return;
@@ -45,26 +42,13 @@ namespace TerminalWeb.Client
             var log = (JsonElement)message.Data;
             var machineId = new Guid(log.GetProperty("machineId").ToString());
 
-            if (_machine.Id == machineId)
+            if (_machine.Id != machineId)
                 return;
 
             var logId = new Guid(log.GetProperty("id").ToString());
-            var command = log.GetProperty("command").ToString();
-            var sb = new StringBuilder();
-            var outputCollection = new PSDataCollection<PSObject>();
+            //var command = log.GetProperty("command").ToString();
 
-            powerShell.AddScript(command);
-
-            outputCollection.DataAdded += (sender, args) =>
-            {
-                var teste = ((PSDataCollection<PSObject>)sender)[args.Index];
-                var teste2 = teste.ToString();
-                sb.AppendLine(teste2);
-                _logConnection.SendAsync("Response", new ResponseLogCommand(logId, sb.ToString()));
-            };
-
-            powerShell.Invoke(null, outputCollection, null);
-
+            _logConnection.SendAsync("Response", new ResponseLogCommand(logId, "Ok"));
             _logConnection.SendAsync("Finish", new FinishLogCommand(logId));
         };
 
