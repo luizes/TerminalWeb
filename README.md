@@ -3,7 +3,7 @@
 # ![logo][] Terminal Web
 Solução de demanda para controlar máquinas remotamente usando CLI.
 
-![logo]: https://image.flaticon.com/icons/svg/852/852484.svg
+[logo]: https://image.flaticon.com/icons/svg/852/852484.svg
 
 ## Ferramentas
  * [Material-UI](https://material-ui.com/pt/)
