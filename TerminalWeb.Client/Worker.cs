@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Diagnostics;
+using System.Management.Automation;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -9,16 +9,15 @@ using System.Threading.Tasks;
 using TerminalWeb.Client.Providers;
 using TerminalWeb.Domain.Commands;
 using TerminalWeb.Domain.Commands.Results;
-using TerminalWeb.Domain.Entities;
 
 namespace TerminalWeb.Client
 {
     class Worker : BackgroundService
     {
-        private readonly MachineProvider _machineProvider = new MachineProvider();
-        private Machine _machine;
         private readonly HubConnection _machineConnection;
         private readonly HubConnection _logConnection;
+        private readonly CreateMachineCommand _machine = new MachineProvider().Generate();
+        private readonly PowerShell powerShell = PowerShell.Create();
 
         public Worker()
         {
@@ -32,48 +31,42 @@ namespace TerminalWeb.Client
             Task.Run(async () =>
             {
                 await _machineConnection.StartAsync();
-                await _machineConnection.SendAsync("Create", _machineProvider.Generate());
-
+                await _machineConnection.SendAsync("Create", _machine);
                 await _logConnection.StartAsync();
-                _logConnection.On("NewLog", (Action<GenericCommandResult>)(message =>
-                {
-                    if (!message.Success)
-                        return;
-
-                    var log = (JsonElement)message.Data;
-                    var logId = new Guid(log.GetProperty("id").ToString());
-
-                    var command = log.GetProperty("command").ToString();
-
-                    var processInfo = new ProcessStartInfo("powershell.exe", command)
-                    {
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        RedirectStandardError = true,
-                        RedirectStandardOutput = true,
-                        WorkingDirectory = @"C:\"
-                    };
-
-                    var sb = new StringBuilder();
-                    var process = Process.Start(processInfo);
-
-                    process.OutputDataReceived += (sender, args) =>
-                    {
-                        sb.AppendLine(args.Data);
-                        ResponseCommand(logId, sb.ToString());
-                    };
-
-                    process.BeginOutputReadLine();
-                    process.WaitForExit();
-                    ResponseCommand(logId, sb.ToString(), true);
-                }));
+                _logConnection.On("NewLog", ProccessLog());
             });
         }
 
-        private void ResponseCommand(Guid logId, string response, bool finish = false)
+        private Action<GenericCommandResult> ProccessLog() => message =>
         {
-            _logConnection.SendAsync("Response", new ResponseLogCommand(logId, response, finish));
-        }
+            if (!message.Success)
+                return;
+
+            var log = (JsonElement)message.Data;
+            var machineId = new Guid(log.GetProperty("machineId").ToString());
+
+            if (_machine.Id == machineId)
+                return;
+
+            var logId = new Guid(log.GetProperty("id").ToString());
+            var command = log.GetProperty("command").ToString();
+            var sb = new StringBuilder();
+            var outputCollection = new PSDataCollection<PSObject>();
+
+            powerShell.AddScript(command);
+
+            outputCollection.DataAdded += (sender, args) =>
+            {
+                var teste = ((PSDataCollection<PSObject>)sender)[args.Index];
+                var teste2 = teste.ToString();
+                sb.AppendLine(teste2);
+                _logConnection.SendAsync("Response", new ResponseLogCommand(logId, sb.ToString()));
+            };
+
+            powerShell.Invoke(null, outputCollection, null);
+
+            _logConnection.SendAsync("Finish", new FinishLogCommand(logId));
+        };
 
         private static HubConnection CreateHubConnection(string endpoint)
         {

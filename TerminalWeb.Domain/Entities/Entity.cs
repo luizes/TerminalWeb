@@ -10,6 +10,12 @@ namespace TerminalWeb.Domain.Entities
             CreatedAt = DateTimeOffset.Now;
         }
 
+        protected Entity(Guid id)
+        {
+            Id = id;
+            CreatedAt = DateTimeOffset.Now;
+        }
+
         public Guid Id { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
 

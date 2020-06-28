@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TerminalWeb.Domain.Entities
 {
     public sealed class Machine : Entity
     {
-        public Machine(string name, string ipLocal, bool antivirusInstalled, bool firewallIsActive, string windowsVersion)
+        public Machine(Guid id, string name, string ipLocal, bool antivirusInstalled, bool firewallIsActive, string windowsVersion)
+            : base(id)
         {
             Name = name;
             IpLocal = ipLocal;

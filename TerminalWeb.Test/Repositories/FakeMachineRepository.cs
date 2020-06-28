@@ -19,7 +19,7 @@ namespace TerminalWeb.Test.Repositories
 
         public Machine GetById(Guid id)
         {
-            return new Machine("", "", false, false, "");
+            return null;
         }
 
         public void Update(Machine entity)

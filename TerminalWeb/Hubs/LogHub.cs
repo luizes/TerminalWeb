@@ -27,5 +27,12 @@ namespace TerminalWeb.Hubs
 
             await Clients.All.SendAsync("ResponseLog", result);
         }
+
+        public async Task Finish(FinishLogCommand command)
+        {
+            var result = _handler.Handle(command);
+
+            await Clients.All.SendAsync("ResponseLog", result);
+        }
     }
 }

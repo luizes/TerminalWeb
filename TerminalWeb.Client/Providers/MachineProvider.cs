@@ -5,6 +5,7 @@ using System.Management;
 using System.Net;
 using TerminalWeb.Client.Providers.Contracts;
 using TerminalWeb.Domain.Commands;
+using TerminalWeb.Domain.ViewModels;
 
 namespace TerminalWeb.Client.Providers
 {
@@ -17,9 +18,9 @@ namespace TerminalWeb.Client.Providers
             var antivirusInstalled = AntivirusInstalled();
             var firewallIsActive = false;
             var windowsVersion = Environment.OSVersion.VersionString;
-            var diskDrives = DriveInfo.GetDrives().Where(d => d.IsReady).Select(drive => (drive.Name, drive.TotalSize));
+            var diskDrives = DriveInfo.GetDrives().Where(d => d.IsReady).Select(drive => new DiskDriveViewModel(drive.Name, drive.TotalSize)).ToArray();
 
-            return new CreateMachineCommand(name, ipLocal, antivirusInstalled, firewallIsActive, windowsVersion, diskDrives);
+            return new CreateMachineCommand(Guid.NewGuid(), name, ipLocal, antivirusInstalled, firewallIsActive, windowsVersion, diskDrives);
         }
 
         private bool AntivirusInstalled()

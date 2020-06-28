@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+using System;
 using TerminalWeb.Domain.Commands;
 using TerminalWeb.Domain.Commands.Results;
 using TerminalWeb.Domain.Handles;
+using TerminalWeb.Domain.ViewModels;
 using TerminalWeb.Test.Repositories;
 
 namespace TerminalWeb.Test.HandlerTests
@@ -11,11 +12,11 @@ namespace TerminalWeb.Test.HandlerTests
     public class MachineHandlerTests
     {
         private readonly MachineHandler _handler = new MachineHandler(new FakeMachineRepository());
-        private readonly CreateMachineCommand _invalidCommand = new CreateMachineCommand("", "", false, false, "", null);
-        private readonly CreateMachineCommand _validCommand = new CreateMachineCommand("Notebook", "192.168.0.1", false, true, "Windows 10 PRO - 1903", new List<(string name, long totalSize)>
+        private readonly CreateMachineCommand _invalidCommand = new CreateMachineCommand(Guid.NewGuid(), "", "", false, false, "", null);
+        private readonly CreateMachineCommand _validCommand = new CreateMachineCommand(Guid.NewGuid(), "Notebook", "192.168.0.1", false, true, "Windows 10 PRO - 1903", new DiskDriveViewModel[]
             {
-                ("C:\\", 165124),
-                ("D:\\", 127498)
+                new DiskDriveViewModel("C:\\", 165124),
+                new DiskDriveViewModel("D:\\", 127498)
             });
         private GenericCommandResult _result = new GenericCommandResult();
 

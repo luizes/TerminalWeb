@@ -5,18 +5,16 @@ using TerminalWeb.Domain.Commands.Contracts;
 
 namespace TerminalWeb.Domain.Commands
 {
-    public sealed class ResponseLogCommand : Notifiable, ICommand
+    public sealed class FinishLogCommand : Notifiable, ICommand
     {
-        public ResponseLogCommand() { }
+        public FinishLogCommand() { }
 
-        public ResponseLogCommand(Guid logId, string response)
+        public FinishLogCommand(Guid logId)
         {
             LogId = logId;
-            Response = response;
         }
 
         public Guid LogId { get; set; }
-        public string Response { get; set; }
 
         public void Validate()
         {

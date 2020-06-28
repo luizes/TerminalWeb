@@ -1,4 +1,5 @@
 ﻿using Flunt.Notifications;
+using System;
 using TerminalWeb.Domain.Commands;
 using TerminalWeb.Domain.Commands.Contracts;
 using TerminalWeb.Domain.Commands.Results;
@@ -24,10 +25,10 @@ namespace TerminalWeb.Domain.Handles
             if (command.Invalid)
                 return new GenericCommandResult(false, "Não será possível integrar a máquina no sistema!", command.Notifications);
 
-            var machine = new Machine(command.Name, command.IpLocal, command.AntivirusInstalled, command.FirewallIsActive, command.WindowsVersion);
+            var machine = new Machine(command.Id, command.Name, command.IpLocal, command.AntivirusInstalled, command.FirewallIsActive, command.WindowsVersion);
 
-            foreach ((string Name, long TotalSize) in command.DiskDrives)
-                machine.AddDiskDrive(Name, TotalSize);
+            foreach (var disk in command.DiskDrives)
+                machine.AddDiskDrive(disk.Name, disk.TotalSize);
 
             _repository.Create(machine);
 

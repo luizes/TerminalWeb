@@ -1,7 +1,8 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using System.Collections.Generic;
+using System;
 using TerminalWeb.Domain.Commands.Contracts;
+using TerminalWeb.Domain.ViewModels;
 
 namespace TerminalWeb.Domain.Commands
 {
@@ -9,8 +10,9 @@ namespace TerminalWeb.Domain.Commands
     {
         public CreateMachineCommand() { }
 
-        public CreateMachineCommand(string name, string ipLocal, bool antivirusInstalled, bool firewallIsActive, string windowsVersion, IEnumerable<(string Name, long TotalSize)> diskDrives)
+        public CreateMachineCommand(Guid id, string name, string ipLocal, bool antivirusInstalled, bool firewallIsActive, string windowsVersion, DiskDriveViewModel[] diskDrives)
         {
+            Id = id;
             Name = name;
             IpLocal = ipLocal;
             AntivirusInstalled = antivirusInstalled;
@@ -19,12 +21,13 @@ namespace TerminalWeb.Domain.Commands
             DiskDrives = diskDrives;
         }
 
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string IpLocal { get; set; }
         public bool AntivirusInstalled { get; set; }
         public bool FirewallIsActive { get; set; }
         public string WindowsVersion { get; set; }
-        public IEnumerable<(string Name, long TotalSize)> DiskDrives { get; set; }
+        public DiskDriveViewModel[] DiskDrives { get; set; }
 
         public void Validate()
         {
