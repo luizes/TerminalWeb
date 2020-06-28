@@ -1,13 +1,14 @@
 ![.NET Core](https://github.com/luizes/TerminalWeb/workflows/.NET%20Core/badge.svg)
 
-# TerminalWeb
-Solução de demanda para controlar máquinas remotamente usando CLI.
+# Terminal Web
+Solução sobe a demanda para controlar máquinas remotamente usando CLI.
 
 ## Ferramentas
  * [Material-UI](https://material-ui.com/pt/)
  * [Entity Framework Core](https://docs.microsoft.com/pt-br/ef/core/)
  * [ASP.NET CoreSignalR](https://docs.microsoft.com/pt-br/aspnet/core/signalr/introduction?view=aspnetcore-3.1)
  * [Flunt](https://github.com/andrebaltieri/flunt)
+ * [PowerShell](https://github.com/PowerShell/PowerShell)
 
 ## Requisitos
  * [.NET Core 3.1](https://dotnet.microsoft.com/download)
