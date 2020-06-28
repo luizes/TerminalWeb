@@ -1,9 +1,7 @@
 ![.NET Core](https://github.com/luizes/TerminalWeb/workflows/.NET%20Core/badge.svg)
 
-# ![](https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png | width=100) Terminal Web
+# ![](https://image.flaticon.com/icons/svg/852/852484.svg) Terminal Web
 Solução de demanda para controlar máquinas remotamente usando CLI.
-
-[logo]: (https://image.flaticon.com/icons/svg/852/852484.svg)
 
 ## Ferramentas
  * [Material-UI](https://material-ui.com/pt/)
