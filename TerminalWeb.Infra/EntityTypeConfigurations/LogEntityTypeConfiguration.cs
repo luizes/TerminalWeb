@@ -13,6 +13,7 @@ namespace TerminalWeb.Infra.EntityTypeConfigurations
             builder.Property(x => x.MachineId).IsRequired();
             builder.Property(x => x.Command).IsRequired();
             builder.Property(x => x.Response);
+            builder.Property(x => x.Finish);
         }
     }
 }

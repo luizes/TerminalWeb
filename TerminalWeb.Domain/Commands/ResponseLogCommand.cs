@@ -9,14 +9,16 @@ namespace TerminalWeb.Domain.Commands
     {
         public ResponseLogCommand() { }
 
-        public ResponseLogCommand(Guid logId, string response)
+        public ResponseLogCommand(Guid logId, string response, bool finish = false)
         {
             LogId = logId;
             Response = response;
+            Finish = finish;
         }
 
         public Guid LogId { get; set; }
         public string Response { get; set; }
+        public bool Finish { get; set; }
 
         public void Validate()
         {

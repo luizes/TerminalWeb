@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,18 +35,44 @@ namespace TerminalWeb.Client
                 await _machineConnection.SendAsync("Create", _machineProvider.Generate());
 
                 await _logConnection.StartAsync();
-                _logConnection.On("NewLog", (Func<GenericCommandResult, Task>)(async message =>
+                _logConnection.On("NewLog", (Action<GenericCommandResult>)(message =>
                 {
                     if (!message.Success)
                         return;
 
                     var log = (JsonElement)message.Data;
                     var logId = new Guid(log.GetProperty("id").ToString());
+
                     var command = log.GetProperty("command").ToString();
 
-                    await _logConnection.SendAsync("Response", new ResponseLogCommand(logId, "respondi"));
+                    var processInfo = new ProcessStartInfo("powershell.exe", command)
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        WorkingDirectory = @"C:\"
+                    };
+
+                    var sb = new StringBuilder();
+                    var process = Process.Start(processInfo);
+
+                    process.OutputDataReceived += (sender, args) =>
+                    {
+                        sb.AppendLine(args.Data);
+                        ResponseCommand(logId, sb.ToString());
+                    };
+
+                    process.BeginOutputReadLine();
+                    process.WaitForExit();
+                    ResponseCommand(logId, sb.ToString(), true);
                 }));
             });
+        }
+
+        private void ResponseCommand(Guid logId, string response, bool finish = false)
+        {
+            _logConnection.SendAsync("Response", new ResponseLogCommand(logId, response, finish));
         }
 
         private static HubConnection CreateHubConnection(string endpoint)

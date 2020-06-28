@@ -40,9 +40,10 @@ namespace TerminalWeb.Domain.Handles
 
             var log = _repository.GetById(command.LogId);
 
-            var logs = _repository.GetAll();
-
             log.SetResponse(command.Response);
+
+            if (command.Finish)
+                log.MarkAsFinish();
 
             _repository.Update(log);
 

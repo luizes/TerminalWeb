@@ -28,15 +28,19 @@ import {
   ListItem,
   ListItemText
 } from "@material-ui/core";
-import { Alert } from "reactstrap";
+import MuiAlert from '@material-ui/lab/Alert';
 import HubGenerator from "../services/hubGenerator";
 import MachineRepository from "../repositories/MachineRepository";
 import LogRepository from "../repositories/LogRepository";
 import { parseSizeForGigaByte, parseDate } from "../converters";
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const useStyles = makeStyles(theme => ({
   formControl: {
-    padding: theme.spacing(1),
+    paddingTop: theme.spacing(1),
     minHeight: "100%",
     maxHeight: "100%",
   },
@@ -47,6 +51,8 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0, 0, 1)
   },
   terminal: {
+    fontFamily: "monospace",
+    whiteSpace: 'pre-wrap',
     height: "100%",
     borderRadius: 0,
     overflow: "auto",
@@ -81,7 +87,7 @@ export default () => {
         machineHub.on("NewMachine", ({ success, data: newMachine }) => {
           if (success) {
             setMachines(others => [...others, newMachine]);
-            setNotification(`${newMachine.name} conectada!`)
+            setNotification(`Nova máquina conectada: ${newMachine.name}`)
           }
         });
       });
@@ -92,7 +98,7 @@ export default () => {
       logHub.start().then(() => {
         logHub.on("ResponseLog", ({ success, data: newLog }) => {
           if (success) {
-            setLogs(others => [...others, newLog]);
+            setLogs(others => others.find(log => log.id === newLog.id) ? others.map(log => log.id === newLog.id ? newLog : log) : [...others, newLog]);
             scrollToButton();
           }
         });
@@ -134,7 +140,7 @@ export default () => {
       <CssBaseline />
       <AppBar>
         <Toolbar>
-          <Typography variant="h6">TerminalWeb</Typography>
+          <Typography variant="h6">Terminal Web</Typography>
         </Toolbar>
       </AppBar>
       <Toolbar />
@@ -142,12 +148,12 @@ export default () => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <div className={classes.formControl}>
-              <FormControl fullWidth>
+              {Boolean(machines.length) ? <FormControl fullWidth>
                 <InputLabel className={classes.label} margin="dense" id="select-machine-label">Máquina:</InputLabel>
                 <Select variant="filled" labelId="select-machine-label" id="machine-select" onChange={e => setMachine(e.target.value)}>
-                  {machines.map(m => <MenuItem key={m.id} value={m}>{m.name}</MenuItem>)}
+                  {machines.map((m, i) => <MenuItem key={i} value={m}>{m.name}</MenuItem>)}
                 </Select>
-              </FormControl>
+              </FormControl> : <Typography variant="p">Nenhuma máquina com o Client conectado.</Typography>}
               {machine && <React.Fragment>
                 <br />
                 <br />
@@ -168,7 +174,7 @@ export default () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {machine.diskDrives.map(disk => <TableRow key={disk.id}>
+                      {machine.diskDrives.map((disk, i) => <TableRow key={i}>
                         <TableCell>{disk.name}</TableCell>
                         <TableCell align="right">{parseSizeForGigaByte(disk.totalSize)}</TableCell>
                       </TableRow>)}
@@ -182,7 +188,7 @@ export default () => {
             <Card id="terminal" className={classes.terminal}>
               <CardContent>
                 <List dense>
-                  {logs.map(log => <ListItem key={log.id}>
+                  {logs.filter(l => l.machineId === machine.id).map((log, i) => <ListItem key={i}>
                     <ListItemText key={log.id} primary={`> ${log.command}`} secondary={log.response} />
                   </ListItem>)}
                 </List>
@@ -194,7 +200,7 @@ export default () => {
           </Grid>}
         </Grid>
       </Container>}
-      <Snackbar open={Boolean(notification)} autoHideDuration={6000} onClose={closeNotification}>
+      <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={Boolean(notification)} autoHideDuration={6000} onClose={closeNotification}>
         <Alert onClose={closeNotification} severity="success">{notification}</Alert>
       </Snackbar>
     </React.Fragment>
