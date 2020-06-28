@@ -1,6 +1,6 @@
 ![.NET Core](https://github.com/luizes/TerminalWeb/workflows/.NET%20Core/badge.svg)
 
-# TerminalWeb
+# Terminal Web
 Solução de demanda para controlar máquinas remotamente usando CLI.
 
 ## Ferramentas
