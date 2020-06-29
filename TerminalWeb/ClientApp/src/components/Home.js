@@ -28,7 +28,7 @@ import {
   ListItem,
   ListItemText
 } from "@material-ui/core";
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from "@material-ui/lab/Alert";
 import HubGenerator from "../services/hubGenerator";
 import MachineRepository from "../repositories/MachineRepository";
 import LogRepository from "../repositories/LogRepository";
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
   terminal: {
     fontFamily: "monospace",
-    whiteSpace: 'pre-wrap',
+    whiteSpace: "pre-wrap",
     height: "100%",
     borderRadius: 0,
     overflow: "auto",
@@ -96,9 +96,16 @@ export default () => {
   useEffect(() => {
     if (logHub)
       logHub.start().then(() => {
+        logHub.on("NewLog", ({ success, data: newLog }) => {
+          if (success) {
+            setLogs(others => [...others, newLog]);
+            scrollToButton();
+          }
+        });
+
         logHub.on("ResponseLog", ({ success, data: newLog }) => {
           if (success) {
-            setLogs(others => others.find(log => log.id === newLog.id) ? others.map(log => log.id === newLog.id ? newLog : log) : [...others, newLog]);
+            setLogs(others => others.map(log => log.id === newLog.id ? newLog : log));
             scrollToButton();
           }
         });
@@ -189,7 +196,7 @@ export default () => {
               <CardContent>
                 <List dense>
                   {logs.filter(l => l.machineId === machine.id).map((log, i) => <ListItem key={i}>
-                    <ListItemText key={log.id} primary={`> ${log.command}`} secondary={log.response} />
+                    <ListItemText key={log.id} secondary={log.response} />
                   </ListItem>)}
                 </List>
               </CardContent>
@@ -200,7 +207,7 @@ export default () => {
           </Grid>}
         </Grid>
       </Container>}
-      <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={Boolean(notification)} autoHideDuration={6000} onClose={closeNotification}>
+      <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={Boolean(notification)} autoHideDuration={6000} onClose={closeNotification}>
         <Alert onClose={closeNotification} severity="success">{notification}</Alert>
       </Snackbar>
     </React.Fragment>

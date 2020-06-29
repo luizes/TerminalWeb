@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,14 +14,26 @@ namespace TerminalWeb.Client
 {
     class Worker : BackgroundService
     {
+        private readonly CreateMachineCommand _machine;
+        private readonly Process _process;
         private readonly HubConnection _machineConnection;
         private readonly HubConnection _logConnection;
-        private readonly CreateMachineCommand _machine = new MachineProvider().Generate();
+        private bool fristCommand = true;
 
         public Worker()
         {
+            _machine = new MachineProvider().Generate();
+
+            _process = Process.Start(new ProcessStartInfo("powershell.exe")
+            {
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                WorkingDirectory = _machine.DiskDrives[0].Name
+            });
+
             _machineConnection = CreateHubConnection("machineHub");
             _logConnection = CreateHubConnection("logHub");
+
             CreateMachineAndStartListeningAsync();
         }
 
@@ -45,11 +59,26 @@ namespace TerminalWeb.Client
             if (_machine.Id != machineId)
                 return;
 
+            var command = log.GetProperty("command").ToString();
             var logId = new Guid(log.GetProperty("id").ToString());
-            //var command = log.GetProperty("command").ToString();
+            var stringBuilder = new StringBuilder();
 
-            _logConnection.SendAsync("Response", new ResponseLogCommand(logId, "Ok"));
+            _process.OutputDataReceived += ResponseLog(logId, stringBuilder);
+            _process.StandardInput.WriteLine(command);
+
+            if (fristCommand)
+            {
+                _process.BeginOutputReadLine();
+                fristCommand = false;
+            }
+
             _logConnection.SendAsync("Finish", new FinishLogCommand(logId));
+        };
+
+        private DataReceivedEventHandler ResponseLog(Guid logId, StringBuilder stringBuilder) => (sender, e) =>
+        {
+            stringBuilder.AppendLine(e.Data);
+            _logConnection.SendAsync("Response", new ResponseLogCommand(logId, stringBuilder.ToString()));
         };
 
         private static HubConnection CreateHubConnection(string endpoint)
@@ -59,7 +88,7 @@ namespace TerminalWeb.Client
                 .WithAutomaticReconnect()
                 .Build();
 
-            hubConnectionBuilder.Closed += async (error) =>
+            hubConnectionBuilder.Closed += async error =>
             {
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await hubConnectionBuilder.StartAsync();
