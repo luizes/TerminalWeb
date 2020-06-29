@@ -3,8 +3,8 @@
 # Terminal Web
 Solução sobe a demanda para controlar máquinas remotamente usando CLI.
 
-## Como rodar?
-Primeiramente inicie o projeto **TerminalWeb**, todas todas as dependências da **Single Page Application** seram resolvidas com `yarn install` automáticamente nos builds.
+## Como Rodar?
+Primeiramente inicie o projeto **TerminalWeb**, todas as dependências da **Single Page Application** seram resolvidas com `yarn install` automáticamente nos builds.
 
 Com a aplicação web rodando é hora de iniciar o projeto **TerminalWeb.Client**. O client ao iniciar registra a máquina na API, uma notificação é mostrada na tela web e a máquina já fica pronta para interação.
 
