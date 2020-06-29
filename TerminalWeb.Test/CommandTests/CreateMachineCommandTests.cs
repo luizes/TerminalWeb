@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using TerminalWeb.Domain.Commands;
 using TerminalWeb.Domain.ViewModels;
 
 namespace TerminalWeb.Test.CommandTests
 {
-    [TestClass]
     public class CreateMachineCommandTests
     {
         private readonly CreateMachineCommand _invalidCommand = new CreateMachineCommand(Guid.NewGuid(), "", "", false, false, "", null);
@@ -21,13 +20,13 @@ namespace TerminalWeb.Test.CommandTests
             _validCommand.Validate();
         }
 
-        [TestMethod]
+        [Test]
         public void DadoUmComandoInvalido()
         {
             Assert.AreEqual(_invalidCommand.Valid, false);
         }
 
-        [TestMethod]
+        [Test]
         public void DadoUmComandoValido()
         {
             Assert.AreEqual(_validCommand.Valid, true);

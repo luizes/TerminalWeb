@@ -31,7 +31,11 @@ namespace TerminalWeb.Domain.Commands
 
         public void Validate()
         {
-            AddNotifications(new Contract().Requires());
+            AddNotifications(
+                new Contract()
+                    .Requires()
+                    .HasMinLen(Name, 1, "Name", "Nome da máquina é invalido.")
+            );
         }
     }
 }

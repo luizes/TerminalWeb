@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using TerminalWeb.Domain.Commands;
 using TerminalWeb.Domain.Commands.Results;
@@ -8,7 +8,6 @@ using TerminalWeb.Test.Repositories;
 
 namespace TerminalWeb.Test.HandlerTests
 {
-    [TestClass]
     public class MachineHandlerTests
     {
         private readonly MachineHandler _handler = new MachineHandler(new FakeMachineRepository());
@@ -20,7 +19,7 @@ namespace TerminalWeb.Test.HandlerTests
             });
         private GenericCommandResult _result = new GenericCommandResult();
 
-        [TestMethod]
+        [Test]
         public void DadoUmComandoInvalidoDeveInterromperExecucao()
         {
             _result = (GenericCommandResult)_handler.Handle(_invalidCommand);
@@ -28,7 +27,7 @@ namespace TerminalWeb.Test.HandlerTests
             Assert.AreEqual(_result.Success, false);
         }
 
-        [TestMethod]
+        [Test]
         public void DadoUmComandoInvalidoDeveCriarUmaMaquina()
         {
             _result = (GenericCommandResult)_handler.Handle(_validCommand);
